@@ -17,10 +17,6 @@ public class CasaJDBC implements ICasa {
     static String insertCasa = "INSERT INTO casa(idCasa,tieneJardin) VALUES (?,?);";
     static String borrarCasa = "DELETE FROM casa WHERE idCasa=?;";
 
-    static String trampaParaOsos = "SET FOREIGN_KEY_CHECKS=0";
-
-
-    //static String borrarMecanicoVehiculo = "DELETE FROM vehiculomecanico WHERE idMecanico = ?;";
 
     @Override
     public void crearCasa(Casa casa) throws DAOException {
