@@ -2,6 +2,7 @@ package net.severo.fct.servicio;
 
 import net.severo.fct.DAO.DAOException;
 import net.severo.fct.DAO.ICasa;
+import net.severo.fct.DAO.JDBC.CasaJDBC;
 import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
 
@@ -27,7 +28,7 @@ public class ServicioCasa {
         }
         if (opcion == 2) {
 
-            idao = new CasaHibernate();
+            //idao = new CasaHibernate();
         }
         if (opcion == 3) {
 
