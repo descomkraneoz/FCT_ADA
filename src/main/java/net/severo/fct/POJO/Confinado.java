@@ -2,54 +2,28 @@ package net.severo.fct.POJO;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "confinado")
 public class Confinado implements Serializable {
     @Id
-    @Column(name = "ID_CONFINADO")
+    @Column(name = "idConfinado")
     private int idConfinado;
 
-    @Column(name = "NOMBRE")
+    @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "CASA")
-    private int idCasa;
+    @ManyToOne
+    @JoinColumn(name = "IdCasa")
+    private Casa casa;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade =
-                    {
-                            CascadeType.DETACH,
-                            CascadeType.MERGE,
-                            CascadeType.REFRESH,
-                            CascadeType.PERSIST
-                    },
-            targetEntity = Confinado.class)
-    @JoinTable(name = "confinadocasa",
-            inverseJoinColumns = @JoinColumn(name = "idConfinado",
-                    nullable = false,
-                    updatable = false),
-            joinColumns = @JoinColumn(name = "IdCasa",
-                    nullable = false,
-                    updatable = false),
-            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
-    private Set<Casa> casas = new HashSet();
 
-    public Confinado(int idConfinado, String nombre, int idCasa, Set<Casa> casas) {
+    public Confinado(int idConfinado, String nombre, Casa casa) {
         this.idConfinado = idConfinado;
         this.nombre = nombre;
-        this.idCasa = idCasa;
-        this.casas = casas;
-    }
-
-    public Confinado(int idConfinado, String nombre, int idCasa) {
-        this.idConfinado = idConfinado;
-        this.nombre = nombre;
-        this.idCasa = idCasa;
+        this.casa = casa;
     }
 
     public Confinado(){
@@ -72,21 +46,15 @@ public class Confinado implements Serializable {
         this.nombre = nombre;
     }
 
-    public int getIdCasa() {
-        return idCasa;
+    public Casa getCasa() {
+        return casa;
     }
 
-    public void setIdCasa(int idCasa) {
-        this.idCasa = idCasa;
+    public void setCasa(Casa casa) {
+        this.casa = casa;
     }
 
-    public Set<Casa> getCasas() {
-        return casas;
-    }
 
-    public void setCasas(Set<Casa> casas) {
-        this.casas = casas;
-    }
 
     @Override
     public boolean equals(Object o) {

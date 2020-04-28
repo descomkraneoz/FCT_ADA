@@ -10,41 +10,25 @@ import java.util.Set;
 @Table(name = "casa")
 public class Casa implements Serializable{
     @Id
-    @Column(name = "ID_CASA")
+    @Column(name = "idCasa")
     private int idCasa;
 
-    @Column(name = "TIENE_JARDIN")
-    private boolean tiene_jardin;
+    @Column(name = "tieneJardin")
+    private boolean tieneJardin;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade =
-                    {
-                            CascadeType.DETACH,
-                            CascadeType.MERGE,
-                            CascadeType.REFRESH,
-                            CascadeType.PERSIST
-                    },
-            targetEntity = Confinado.class)
-    @JoinTable(name = "confinadocasa",
-            inverseJoinColumns = @JoinColumn(name = "IdConfinado",
-                    nullable = false,
-                    updatable = false),
-            joinColumns = @JoinColumn(name = "IdCasa",
-                    nullable = false,
-                    updatable = false),
-            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
+
     private Set<Confinado> confinados = new HashSet();
 
-    public Casa(int idCasa, boolean tiene_jardin, Set<Confinado> confinados) {
+    public Casa(int idCasa, boolean tieneJardin, Set<Confinado> confinados) {
         this.idCasa = idCasa;
-        this.tiene_jardin = tiene_jardin;
+        this.tieneJardin = tieneJardin;
         this.confinados = confinados;
     }
 
-    public Casa(int idCasa, boolean tiene_jardin) {
+    public Casa(int idCasa, boolean tieneJardin) {
         this.idCasa = idCasa;
-        this.tiene_jardin = tiene_jardin;
+        this.tieneJardin = tieneJardin;
     }
     public Casa(){
 
@@ -58,12 +42,12 @@ public class Casa implements Serializable{
         this.idCasa = idCasa;
     }
 
-    public boolean getTiene_jardin() {
-        return tiene_jardin;
+    public boolean getTieneJardin() {
+        return tieneJardin;
     }
 
-    public void setTiene_jardin(boolean tiene_jardin) {
-        this.tiene_jardin = tiene_jardin;
+    public void setTieneJardin(boolean tieneJardin) {
+        this.tieneJardin = tieneJardin;
     }
 
     public Set<Confinado> getConfinados() {

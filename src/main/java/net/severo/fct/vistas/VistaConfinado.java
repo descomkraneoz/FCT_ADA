@@ -2,9 +2,6 @@ package net.severo.fct.vistas;
 
 import net.severo.fct.POJO.Confinado;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,18 +13,6 @@ public class VistaConfinado {
             return true;
         } catch (NumberFormatException nfe) {
             return false;
-        }
-    }
-
-    private static Date obtenerFecha(String cadena) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaNac = null;
-        try {
-            fechaNac = sdf.parse(cadena);
-            return fechaNac;
-        } catch (ParseException ex) {
-            // si no es fecha devolvemos un null
-            return null;
         }
     }
 
@@ -43,7 +28,7 @@ public class VistaConfinado {
 
     public int menuPrincipal() {
         Scanner sc = new Scanner(System.in);
-        String menu = "  1. Nuevo Confinado. \n 2. Ver Confinados \n 3. Eliminar Confinado \n 0. Salir \n ¿Que quiere hacer?";
+        String menu = "  1. Nuevo Confinado. \n 2. Ver Confinados \n 3. Eliminar Confinado \n 4. Asignar Confinado a nueva Casa. \n 0. Salir \n ¿Que quiere hacer?";
 
         int opcion = -1; //opcion -1 indica opcion incorrecta
         while (opcion == -1) {
@@ -126,14 +111,12 @@ public class VistaConfinado {
     }
 
 
-
-
     public void mostrarListaConfinados(List<Confinado> confinados) {
         System.out.println("------------------ LISTA DE CONFINADOS -----------------------");
-        System.out.println("CÓDIGO     NOMBRE       CASA");
-        System.out.println("------   ----------    ------");
+        System.out.println("CÓDIGO     NOMBRE           CASA CON JARDIN");
+        System.out.println("------   ----------         ----------------");
         for (Confinado v : confinados) {
-            System.out.printf("%-8s %-15s %-13s \n", v.getIdConfinado(), v.getNombre(), v.getIdCasa());
+            System.out.printf("%-8s %-25s %-13s \n", v.getIdConfinado(), v.getNombre(), v.getCasa().getTieneJardin());
         }
         System.out.println("-------------------------------------------------------------");
     }

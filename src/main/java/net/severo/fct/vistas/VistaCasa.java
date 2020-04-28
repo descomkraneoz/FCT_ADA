@@ -43,7 +43,7 @@ public class VistaCasa {
 
     public int menuPrincipal() {
         Scanner sc = new Scanner(System.in);
-        String menu = "  1. Nueva Casa. \n 2. Ver Casas \n 3. Eliminar Casa \n 4. Asignar Confinado a Casa. \n 5. Mostrar Confinado y Casa. \n 0. Salir \n ¿Que quiere hacer?";
+        String menu = "  1. Nueva Casa. \n 2. Ver Casas \n 3. Eliminar Casa \n 0. Salir \n ¿Que quiere hacer?";
 
         int opcion = -1; //opcion -1 indica opcion incorrecta
         while (opcion == -1) {
@@ -111,7 +111,7 @@ public class VistaCasa {
         System.out.println("ID        TIENE JARDIN    ");
         System.out.println("---      ---------------  ");
         for (Casa m : casas) {
-            System.out.printf("%-10d %-30s \n", m.getIdCasa(), m.getTiene_jardin()? "Sí" : "No");
+            System.out.printf("%-10d %-30s \n", m.getIdCasa(), m.getTieneJardin() ? "Sí" : "No");
         }
         System.out.println("---------------------------------------");
     }
@@ -124,7 +124,7 @@ public class VistaCasa {
         System.out.println("------------------    ------------------");
         for (Casa m : casas) {
             for (Confinado v : confinados) {
-                System.out.printf("%-30s %-30s \n", v.getNombre(), m.getTiene_jardin());
+                System.out.printf("%-30s %-30s \n", v.getNombre(), m.getTieneJardin());
             }
         }
         System.out.println("---------------------------------------");

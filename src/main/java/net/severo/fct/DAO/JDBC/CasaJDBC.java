@@ -3,27 +3,23 @@ package net.severo.fct.DAO.JDBC;
 import net.severo.fct.DAO.DAOException;
 import net.severo.fct.DAO.ICasa;
 import net.severo.fct.POJO.Casa;
-import net.severo.fct.POJO.Confinado;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CasaJDBC implements ICasa {
     static String mostrarTodasLasCasas = "SELECT * FROM casa;";
     static String getCasa = "SELECT * FROM casa WHERE idCasa=?;";
-    static String insertCasa = "INSERT INTO casa(idCasa,tiene_jardin) VALUES (?,?);";
+    static String insertCasa = "INSERT INTO casa(idCasa,tieneJardin) VALUES (?,?);";
     static String borrarCasa = "DELETE FROM casa WHERE idCasa=?;";
-
 
     static String trampaParaOsos = "SET FOREIGN_KEY_CHECKS=0";
 
-    static String asignarCasa = "INSERT INTO confinadocasa(idCasa,idConfinado) VALUES (?,?);";
+
     //static String borrarMecanicoVehiculo = "DELETE FROM vehiculomecanico WHERE idMecanico = ?;";
 
     @Override
@@ -35,7 +31,7 @@ public class CasaJDBC implements ICasa {
 
             ps = conn.prepareStatement(insertCasa);
             ps.setInt(1, casa.getIdCasa());
-            ps.setBoolean(2, casa.getTiene_jardin());
+            ps.setBoolean(2, casa.getTieneJardin());
 
 
             @SuppressWarnings("unused")
@@ -101,7 +97,7 @@ public class CasaJDBC implements ICasa {
                 Boolean jardin = rs.getBoolean("tiene_jardin");
 
                 j.setIdCasa(codCasa);
-                j.setTiene_jardin(jardin);
+                j.setTieneJardin(jardin);
                 casas.add(j);
             }
             return casas;
@@ -136,11 +132,11 @@ public class CasaJDBC implements ICasa {
             }
 
             int idCasa = rs.getInt("idCasa");
-            Boolean jardin = rs.getBoolean("tiene_jardin");
+            Boolean jardin = rs.getBoolean("tieneJardin");
 
 
             j.setIdCasa(idCasa);
-            j.setTiene_jardin(jardin);
+            j.setTieneJardin(jardin);
             return j;
 
         } catch (Exception e) {
@@ -151,39 +147,6 @@ public class CasaJDBC implements ICasa {
 
             } catch (SQLException ex) {
                 throw new DAOException("Error al cerrar la base de datos", ex);
-            }
-        }
-    }
-
-    @Override
-    public void asignarCasaAlConfinado(Casa m, Confinado v) throws DAOException {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        Set<Confinado> confinados = new HashSet<>();
-
-        try {
-            conn = ConexionJDBC.getInstance().getConnection();
-
-            ps = conn.prepareStatement(trampaParaOsos);
-
-            ps = conn.prepareStatement(asignarCasa);
-            ps.setInt(1, m.getIdCasa());
-            ps.setInt(2, v.getIdConfinado());
-            confinados.add(v);
-
-            @SuppressWarnings("unused")
-            int afectadas = ps.executeUpdate();
-            //Este entero no lo vamos a usar pero devuelve el número de filas aceptadas
-            //En otras ocasiones nos puede ser útil, aquí siempre debe devolver 1
-
-        } catch (Exception ex) {
-            throw new DAOException("Ha habido un problema al insertar el confinado a la casa en la base de datos: ", ex);
-        } finally {
-            try {
-                ps.close();
-
-            } catch (SQLException sqlex) {
-                throw new DAOException("Error al cerrar la sentencia", sqlex);
             }
         }
     }

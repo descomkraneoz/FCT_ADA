@@ -1,6 +1,7 @@
 package net.severo.fct.servicio;
 
 import net.severo.fct.DAO.DAOException;
+import net.severo.fct.DAO.Hibernate.ConfinadoHibernate;
 import net.severo.fct.DAO.IConfinado;
 import net.severo.fct.DAO.JDBC.ConfinadoJDBC;
 import net.severo.fct.POJO.Confinado;
@@ -27,7 +28,7 @@ public class ServicioConfinado {
         }
         if (opcion == 2) {
 
-            //idao = new ConfinadoHibernate();
+            idao = new ConfinadoHibernate();
         }
         if (opcion == 3) {
 

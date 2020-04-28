@@ -2,6 +2,7 @@ package net.severo.fct.DAO.JDBC;
 
 import net.severo.fct.DAO.DAOException;
 import net.severo.fct.DAO.IConfinado;
+import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
 
 import java.sql.Connection;
@@ -9,13 +10,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+
+
 
 public class ConfinadoJDBC implements IConfinado {
     static String mostrarTodosLosConfinados = "SELECT * FROM confinado;";
     static String getConfinado = "SELECT * FROM confinado WHERE idConfinado=?;";
-    static String insertConfinado = "INSERT INTO confinado(idConfinado,nombre,idCasa) VALUES (?,?,?);";
+    static String insertConfinado = "INSERT INTO confinado(idConfinado, nombre, casa) VALUES (?,?,?);";
     static String borrarConfinado = "DELETE FROM confinado WHERE idConfinado=?;";
+
+    static String trampaParaOsos = "SET FOREIGN_KEY_CHECKS=0";
+
+    static String asignarCasa = "INSERT INTO confinadocasa(idCasa,idConfinado) VALUES (?,?);";
 
     public ConfinadoJDBC() throws DAOException {
 
@@ -34,7 +44,7 @@ public class ConfinadoJDBC implements IConfinado {
             ps = conn.prepareStatement(insertConfinado);
             ps.setInt(1, confinado.getIdConfinado());
             ps.setString(2, confinado.getNombre());
-            ps.setInt(3, confinado.getIdCasa());
+            ps.setObject(3, confinado.getCasa());
 
             @SuppressWarnings("unused")
             int afectadas = ps.executeUpdate();
@@ -97,11 +107,11 @@ public class ConfinadoJDBC implements IConfinado {
 
             int idConfi = rs.getInt("idConfinado");
             String nom = rs.getString("nombre");
-            int idCasa = rs.getInt("idCasa");
+            Casa casa = (Casa) rs.getObject("casa");
 
-            j.setIdConfinado(id);
+            j.setIdConfinado(idConfi);
             j.setNombre(nom);
-            j.setIdCasa(idCasa);
+            j.setCasa(casa);
             return j;
 
         } catch (Exception e) {
@@ -132,11 +142,11 @@ public class ConfinadoJDBC implements IConfinado {
                 Confinado j = new Confinado();
                 int codConfinado = rs.getInt("idConfinado");
                 String nombre = rs.getString("nombre");
-                int codCasa = rs.getInt("idCasa");
+                Casa casa = (Casa) rs.getObject("casa");
 
                 j.setIdConfinado(codConfinado);
                 j.setNombre(nombre);
-                j.setIdCasa(codCasa);
+                j.setCasa(casa);
 
                 confinados.add(j);
 
@@ -153,7 +163,40 @@ public class ConfinadoJDBC implements IConfinado {
             } catch (SQLException ex) {
                 throw new DAOException("Error al cerrar la base de datos", ex);
             }
+        }
+    }
 
+    @Override
+    public void asignarCasaAlConfinado(Casa m, Confinado v) throws DAOException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        Set<Confinado> confinados = new HashSet<>();
+
+        try {
+            conn = ConexionJDBC.getInstance().getConnection();
+
+            ps = conn.prepareStatement(trampaParaOsos);
+
+            ps = conn.prepareStatement(asignarCasa);
+            ps.setInt(1, m.getIdCasa());
+            ps.setInt(2, v.getIdConfinado());
+            confinados.add(v);
+
+            @SuppressWarnings("unused")
+            int afectadas = ps.executeUpdate();
+            //Este entero no lo vamos a usar pero devuelve el número de filas aceptadas
+            //En otras ocasiones nos puede ser útil, aquí siempre debe devolver 1
+
+
+        } catch (Exception ex) {
+            throw new DAOException("Ha habido un problema al asignar el confinado a la casa en la base de datos: ", ex);
+        } finally {
+            try {
+                ps.close();
+
+            } catch (SQLException sqlex) {
+                throw new DAOException("Error al cerrar la sentencia", sqlex);
+            }
         }
     }
 
@@ -164,7 +207,6 @@ public class ConfinadoJDBC implements IConfinado {
         } catch (SQLException ex) {
             throw new DAOException("Error al finalizar la conexion con la base de datos", ex);
         }
-
     }
 
     @Override
@@ -174,7 +216,6 @@ public class ConfinadoJDBC implements IConfinado {
         } catch (SQLException ex) {
             throw new DAOException("Error al inicair la transaccion", ex);
         }
-
     }
 
     @Override
@@ -188,7 +229,5 @@ public class ConfinadoJDBC implements IConfinado {
                 throw new DAOException("No se ha podido finalizar la transsaccion. Se han desecho los cambios", ex);
             }
         }
-
-
     }
 }
