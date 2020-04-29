@@ -48,10 +48,6 @@ public class ControladorConfinado {
 
     public void ControladorNuevoConfinado() {
         Confinado v;
-
-        //Aqui podria iniciar transacción
-
-
         Integer id = vv.pedirIdConfinado();
         if (id == null) {
             return;
@@ -61,25 +57,15 @@ public class ControladorConfinado {
             return;
         }
         try {
-            ServicioCasa.getServicio().servicioObtenerTodasLasCasas();
-        } catch (DAOException e) {
-            e.printStackTrace();
-        } catch (ServiciosException e) {
-            e.printStackTrace();
-        }
-        Integer idCasa = vv.pedirIdCasa();
-        if (idCasa == null) {
-            return;
-        }
-
-        try {
-            Casa casa = ServicioCasa.getServicio().servicioObtenerCasaPorID(idCasa);
+            new VistaCasa().mostrarListaCasas(ServicioCasa.getServicio().servicioObtenerTodasLasCasas());
+            Integer codCasa = new VistaCasa().pedirIdCasa();
+            Casa casa = ServicioCasa.getServicio().servicioObtenerCasaPorID(codCasa);
             v = new Confinado(id, nombre, casa);
             ServicioConfinado.getServicio().servicioCrearConfinado(v);
         } catch (ServiciosException e) {
             vv.mostrarError("Error al generar un nuevo vehiculo en el controlador: " + e);
         } catch (DAOException e) {
-            vv.mostrarError("Error desde el controlador al intentar obtener los datos, el vehiculo no será creado: " + e);
+            vv.mostrarError("Error desde el controlador al intentar obtener los datos, el confinado no será creado: " + e);
         }
     }
 

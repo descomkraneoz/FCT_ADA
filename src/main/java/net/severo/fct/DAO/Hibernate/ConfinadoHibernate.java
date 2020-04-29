@@ -63,7 +63,7 @@ public class ConfinadoHibernate implements IConfinado {
             List<Confinado> lista;
 
             // Hacemos la consulta
-            Query q = sesion.createQuery("from confinado");
+            Query q = sesion.createQuery("from Confinado");
             lista = q.list();
             for (Confinado j : lista) {
                 Hibernate.initialize(j.getIdConfinado());
@@ -80,10 +80,8 @@ public class ConfinadoHibernate implements IConfinado {
         Session sesion = SesionHibernate.getInstance().getSesion();
         try {
 
-            m.getConfinados().add(v);
-
-            sesion.save(v);
-            sesion.save(m);
+            sesion.save(m.getIdCasa());
+            sesion.save(v.getIdConfinado());
 
         } catch (Exception e) {
             throw new DAOException("Ha habido un problema al asignar el confinado a la casa", e);

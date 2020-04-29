@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory name="MiSesionFactory">
 
-        <property name="connection.url">jdbc:mysql://localhost/aeropuertohiber</property>
+        <property name="connection.url">jdbc:mysql://localhost/fcthiber</property>
         <property name="connection.username">root</property>
         <property name="connection.password"></property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
@@ -14,7 +14,8 @@
         <property name="show_sql">true</property>
 
         <property name="format_sql">true</property>
-        <property name="hbm2ddl.auto">create</property> <!--cuando tenga las tablas creadas lo cambio a update-->
+        <property name="hbm2ddl.auto">update
+        </property> <!--cuando tenga las tablas creadas lo cambio de create a update-->
 
         <!-- JDBC connection pool (use the built-in)
         <property name="connection.pool_size">1</property>

@@ -11,7 +11,7 @@
         <property name="tieneJardin" type="java.lang.Boolean">
             <column name="tieneJardin"/>
         </property>
-        <set name="confinado" cascade="all" inverse="true">
+        <set name="confinados" cascade="all" inverse="true">
             <key>
                 <column name="idCasa"/>
             </key>

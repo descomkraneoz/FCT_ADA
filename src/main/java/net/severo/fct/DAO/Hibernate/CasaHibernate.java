@@ -47,7 +47,7 @@ public class CasaHibernate implements ICasa {
             List<Casa> lista;
 
             // Hacemos la consulta
-            Query q = sesion.createQuery("from casa");
+            Query q = sesion.createQuery("from Casa");
             lista = q.list();
             for (Casa j : lista) {
                 Hibernate.initialize(j.getIdCasa());

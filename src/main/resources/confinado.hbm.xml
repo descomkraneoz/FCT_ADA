@@ -11,7 +11,7 @@
         <property name="nombre" type="java.lang.String">
             <column name="nombre"/>
         </property>
-        <many-to-one name="idCasa">
+        <many-to-one name="casa">
             <column name="idCasa"/>
         </many-to-one>
     </class>
