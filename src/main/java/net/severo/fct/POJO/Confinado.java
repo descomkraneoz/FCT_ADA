@@ -50,10 +50,13 @@ public class Confinado implements Serializable {
         return casa;
     }
 
+    public int getIdCasa() {
+        return casa.getIdCasa();
+    }
+
     public void setCasa(Casa casa) {
         this.casa = casa;
     }
-
 
 
     @Override

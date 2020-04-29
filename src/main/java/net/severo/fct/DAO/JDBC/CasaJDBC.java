@@ -90,7 +90,7 @@ public class CasaJDBC implements ICasa {
             while (rs.next()) {
                 Casa j = new Casa();
                 int codCasa = rs.getInt("idCasa");
-                Boolean jardin = rs.getBoolean("tiene_jardin");
+                Boolean jardin = rs.getBoolean("tieneJardin");
 
                 j.setIdCasa(codCasa);
                 j.setTieneJardin(jardin);

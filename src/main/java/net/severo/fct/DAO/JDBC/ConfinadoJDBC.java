@@ -4,15 +4,14 @@ import net.severo.fct.DAO.DAOException;
 import net.severo.fct.DAO.IConfinado;
 import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
+import net.severo.fct.servicio.ServicioCasa;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 
@@ -25,7 +24,7 @@ public class ConfinadoJDBC implements IConfinado {
 
     static String trampaParaOsos = "SET FOREIGN_KEY_CHECKS=0";
 
-    static String asignarCasa = "INSERT INTO confinadocasa(idCasa,idConfinado) VALUES (?,?);";
+    static String asignarCasa = "UPDATE FROM confinado WHERE idConfinado=?;";
 
     public ConfinadoJDBC() throws DAOException {
 
@@ -108,10 +107,11 @@ public class ConfinadoJDBC implements IConfinado {
             int idConfi = rs.getInt("idConfinado");
             String nom = rs.getString("nombre");
             Casa casa = (Casa) rs.getObject("casa");
+            int idCasa = casa.getIdCasa();
 
             j.setIdConfinado(idConfi);
             j.setNombre(nom);
-            j.setCasa(casa);
+            j.setCasa(new Casa(idCasa, casa.getTieneJardin()));
             return j;
 
         } catch (Exception e) {
@@ -131,18 +131,19 @@ public class ConfinadoJDBC implements IConfinado {
         List<Confinado> confinados = new ArrayList<Confinado>();
         Connection conn = null;
         PreparedStatement ps = null;
+        Casa casa = new Casa();
 
         try {
             conn = ConexionJDBC.getInstance().getConnection();
-
             ps = conn.prepareStatement(mostrarTodosLosConfinados);
-
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 Confinado j = new Confinado();
                 int codConfinado = rs.getInt("idConfinado");
                 String nombre = rs.getString("nombre");
-                Casa casa = (Casa) rs.getObject("casa");
+                int codCasa = rs.getInt("idCasa");
+                casa = ServicioCasa.getServicio().servicioObtenerCasaPorID(codCasa);
 
                 j.setIdConfinado(codConfinado);
                 j.setNombre(nombre);
@@ -170,17 +171,13 @@ public class ConfinadoJDBC implements IConfinado {
     public void asignarCasaAlConfinado(int codCasa, int codConfinado) throws DAOException {
         Connection conn = null;
         PreparedStatement ps = null;
-        Set<Confinado> confinados = new HashSet<>();
 
         try {
             conn = ConexionJDBC.getInstance().getConnection();
 
-            ps = conn.prepareStatement(trampaParaOsos);
-
             ps = conn.prepareStatement(asignarCasa);
-            //ps.setInt(1, m.getIdCasa());
-            //ps.setInt(2, v.getIdConfinado());
-            //confinados.add(v);
+            ps.setInt(1, codConfinado);
+            ps.setInt(3, codCasa);
 
             @SuppressWarnings("unused")
             int afectadas = ps.executeUpdate();
@@ -189,7 +186,7 @@ public class ConfinadoJDBC implements IConfinado {
 
 
         } catch (Exception ex) {
-            throw new DAOException("Ha habido un problema al asignar el confinado a la casa en la base de datos: ", ex);
+            throw new DAOException("Ha habido un problema al modificar el mecánico en la base de datos: ", ex);
         } finally {
             try {
                 ps.close();
