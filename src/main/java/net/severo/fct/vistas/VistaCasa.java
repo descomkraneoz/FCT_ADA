@@ -3,9 +3,6 @@ package net.severo.fct.vistas;
 import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,18 +14,6 @@ public class VistaCasa {
             return true;
         } catch (NumberFormatException nfe) {
             return false;
-        }
-    }
-
-    private static Date obtenerFecha(String cadena) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaNac = null;
-        try {
-            fechaNac = sdf.parse(cadena);
-            return fechaNac;
-        } catch (ParseException ex) {
-            // si no es fecha devolvemos un null
-            return null;
         }
     }
 

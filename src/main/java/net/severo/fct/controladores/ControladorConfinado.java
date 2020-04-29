@@ -1,12 +1,15 @@
 package net.severo.fct.controladores;
 
 import net.severo.fct.DAO.DAOException;
+import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
+import net.severo.fct.servicio.ServicioCasa;
 import net.severo.fct.servicio.ServicioConfinado;
 import net.severo.fct.servicio.ServiciosException;
+import net.severo.fct.vistas.VistaCasa;
 import net.severo.fct.vistas.VistaConfinado;
 
-import java.util.Date;
+
 
 public class ControladorConfinado {
     private VistaConfinado vv = null;
@@ -32,7 +35,7 @@ public class ControladorConfinado {
                     this.ControladorEliminarConfinado();
                     break;
                 case 4:
-                    //this.ControladorModificarConfinado();
+                    this.ControladorAsignarCasaAlConfinado();
                     break;
                 case 5:
                     //No implementado
@@ -57,13 +60,21 @@ public class ControladorConfinado {
         if (nombre == null) {
             return;
         }
+        try {
+            ServicioCasa.getServicio().servicioObtenerTodasLasCasas();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        } catch (ServiciosException e) {
+            e.printStackTrace();
+        }
         Integer idCasa = vv.pedirIdCasa();
         if (idCasa == null) {
             return;
         }
 
         try {
-            v = new Confinado(id, nombre, idCasa);
+            Casa casa = ServicioCasa.getServicio().servicioObtenerCasaPorID(idCasa);
+            v = new Confinado(id, nombre, casa);
             ServicioConfinado.getServicio().servicioCrearConfinado(v);
         } catch (ServiciosException e) {
             vv.mostrarError("Error al generar un nuevo vehiculo en el controlador: " + e);
@@ -97,6 +108,34 @@ public class ControladorConfinado {
             vv.mostrarError("Error al intentar mostrar los datos: " + ex);
             ex.printStackTrace();
         }
+    }
+
+    private void ControladorAsignarCasaAlConfinado() {
+        try {
+            ServicioCasa.getServicio().iniciarTransaccion();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+        try {
+            new VistaCasa().mostrarListaCasas(ServicioCasa.getServicio().servicioObtenerTodasLasCasas());
+            Integer codMec = new VistaCasa().pedirIdCasa();
+            vv.mostrarListaConfinados(ServicioConfinado.getServicio().servicioObtenerConfinados());
+            Integer codigoConfinado = vv.pedirIdConfinado();
+
+            ServicioConfinado.getServicio().servicioAsignarCasaAlConfinado(codMec, codigoConfinado);
+
+        } catch (DAOException dao) {
+            vv.mostrarError("Error en el controlador al intentar obtener los datos: " + dao.getMessage());
+        } catch (ServiciosException se) {
+            vv.mostrarError("Error en el controlador al asignar una casa al confinado: " + se.getMessage());
+        }
+
+        try {
+            ServicioCasa.getServicio().finalizarTransaccion();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

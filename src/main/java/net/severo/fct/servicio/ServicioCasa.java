@@ -95,18 +95,6 @@ public class ServicioCasa {
         idao.eliminarCasa(codigo);
     }
 
-    //asignar confinados a una casa
-    public void servicioAsignarCasaAlConfinado(int idCasa, int idConfinado) throws DAOException, ServiciosException {
-
-        Confinado v;
-        v = ServicioConfinado.getServicio().servicioObtenerConfinado(idConfinado);
-
-        Casa m;
-        m = this.servicioObtenerCasaPorID(idCasa);
-
-        idao.asignarCasaAlConfinado(m, v);
-    }
-
 
     //transacciones
 

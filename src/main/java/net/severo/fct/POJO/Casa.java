@@ -17,7 +17,6 @@ public class Casa implements Serializable{
     private boolean tieneJardin;
 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
-
     private Set<Confinado> confinados = new HashSet();
 
     public Casa(int idCasa, boolean tieneJardin, Set<Confinado> confinados) {

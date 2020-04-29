@@ -3,10 +3,8 @@ package net.severo.fct.controladores;
 import net.severo.fct.DAO.DAOException;
 import net.severo.fct.POJO.Casa;
 import net.severo.fct.servicio.ServicioCasa;
-import net.severo.fct.servicio.ServicioConfinado;
 import net.severo.fct.servicio.ServiciosException;
 import net.severo.fct.vistas.VistaCasa;
-import net.severo.fct.vistas.VistaConfinado;
 
 public class ControladorCasa {
     VistaCasa vm = null;
@@ -33,7 +31,7 @@ public class ControladorCasa {
                     this.ControladorEliminarCasa();
                     break;
                 case 4:
-                    this.ControladorAsignarCasaAlConfinado();
+
                     break;
                 case 5:
                    //
@@ -97,33 +95,5 @@ public class ControladorCasa {
         }
     }
 
-    private void ControladorAsignarCasaAlConfinado() {
-        try {
-            ServicioCasa.getServicio().iniciarTransaccion();
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-        try {
-            vm.mostrarListaCasas(ServicioCasa.getServicio().servicioObtenerTodasLasCasas());
-            Integer codMec = vm.pedirIdCasa();
-
-            new VistaConfinado().mostrarListaConfinados(ServicioConfinado.getServicio().servicioObtenerConfinados());
-            Integer codigoConfinado = new VistaConfinado().pedirIdConfinado();
-
-            ServicioCasa.getServicio().servicioAsignarCasaAlConfinado(codMec, codigoConfinado);
-
-        } catch (DAOException dao) {
-            vm.mostrarError("Error en el controlador al intentar obtener los datos: " + dao.getMessage());
-        } catch (ServiciosException se) {
-            vm.mostrarError("Error en el controlador al asignar una casa al confinado: " + se.getMessage());
-        }
-
-        try {
-            ServicioCasa.getServicio().finalizarTransaccion();
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 }

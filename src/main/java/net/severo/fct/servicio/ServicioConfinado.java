@@ -4,6 +4,7 @@ import net.severo.fct.DAO.DAOException;
 import net.severo.fct.DAO.Hibernate.ConfinadoHibernate;
 import net.severo.fct.DAO.IConfinado;
 import net.severo.fct.DAO.JDBC.ConfinadoJDBC;
+import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
 
 import java.util.List;
@@ -79,6 +80,18 @@ public class ServicioConfinado {
             throw new ServiciosException("No hay ningún confinado");
         }
         return confinados;
+    }
+
+    //asignar confinados a una casa
+    public void servicioAsignarCasaAlConfinado(int idCasa, int idConfinado) throws DAOException, ServiciosException {
+
+        Confinado v;
+        v = ServicioConfinado.getServicio().servicioObtenerConfinado(idConfinado);
+
+        Casa m;
+        m = ServicioCasa.getServicio().servicioObtenerCasaPorID(idCasa);
+
+        idao.asignarCasaAlConfinado(m, v);
     }
 
 
