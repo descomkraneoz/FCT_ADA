@@ -4,6 +4,7 @@ import net.severo.fct.DAO.DAOException;
 import net.severo.fct.DAO.IConfinado;
 import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
+import net.severo.fct.servicio.ServicioCasa;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -44,7 +45,6 @@ public class ConfinadoHibernate implements IConfinado {
         Session sesion = SesionHibernate.getInstance().getSesion();
         try {
             Confinado j = new Confinado();
-
             j = (Confinado) sesion.get(Confinado.class, id);
 
             return j;
@@ -61,7 +61,6 @@ public class ConfinadoHibernate implements IConfinado {
 
             // Variable que almacena la lista a devolver
             List<Confinado> lista;
-
             // Hacemos la consulta
             Query q = sesion.createQuery("from Confinado");
             lista = q.list();
@@ -76,15 +75,16 @@ public class ConfinadoHibernate implements IConfinado {
     }
 
     @Override
-    public void asignarCasaAlConfinado(Casa m, Confinado v) throws DAOException {
+    public void asignarCasaAlConfinado(int codCasa, int codConfinado) throws DAOException {
         Session sesion = SesionHibernate.getInstance().getSesion();
         try {
-
-            sesion.save(m.getIdCasa());
-            sesion.save(v.getIdConfinado());
+            Confinado con = this.obtenerUnConfinadoPorID(codConfinado);
+            Casa casa = ServicioCasa.getServicio().servicioObtenerCasaPorID(codCasa);
+            con.setCasa(casa);
+            sesion.save(con);
 
         } catch (Exception e) {
-            throw new DAOException("Ha habido un problema al asignar el confinado a la casa", e);
+            throw new DAOException("Ha habido un problema al asignar el confinado a la casa desde ConfinadoHibernate", e);
         }
 
     }

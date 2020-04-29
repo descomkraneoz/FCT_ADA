@@ -167,7 +167,7 @@ public class ConfinadoJDBC implements IConfinado {
     }
 
     @Override
-    public void asignarCasaAlConfinado(Casa m, Confinado v) throws DAOException {
+    public void asignarCasaAlConfinado(int codCasa, int codConfinado) throws DAOException {
         Connection conn = null;
         PreparedStatement ps = null;
         Set<Confinado> confinados = new HashSet<>();
@@ -178,9 +178,9 @@ public class ConfinadoJDBC implements IConfinado {
             ps = conn.prepareStatement(trampaParaOsos);
 
             ps = conn.prepareStatement(asignarCasa);
-            ps.setInt(1, m.getIdCasa());
-            ps.setInt(2, v.getIdConfinado());
-            confinados.add(v);
+            //ps.setInt(1, m.getIdCasa());
+            //ps.setInt(2, v.getIdConfinado());
+            //confinados.add(v);
 
             @SuppressWarnings("unused")
             int afectadas = ps.executeUpdate();

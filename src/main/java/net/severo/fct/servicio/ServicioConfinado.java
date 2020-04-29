@@ -82,7 +82,7 @@ public class ServicioConfinado {
         return confinados;
     }
 
-    //asignar confinados a una casa
+    //asignar confinado a una casa
     public void servicioAsignarCasaAlConfinado(int idCasa, int idConfinado) throws DAOException, ServiciosException {
 
         Confinado v;
@@ -91,7 +91,7 @@ public class ServicioConfinado {
         Casa m;
         m = ServicioCasa.getServicio().servicioObtenerCasaPorID(idCasa);
 
-        idao.asignarCasaAlConfinado(m, v);
+        idao.asignarCasaAlConfinado(m.getIdCasa(), v.getIdConfinado());
     }
 
 

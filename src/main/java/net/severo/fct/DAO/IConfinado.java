@@ -1,6 +1,5 @@
 package net.severo.fct.DAO;
 
-import net.severo.fct.POJO.Casa;
 import net.severo.fct.POJO.Confinado;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface IConfinado {
 
     List<Confinado> obtenerTodosLosConfinados()  throws DAOException ;
 
-    void asignarCasaAlConfinado(Casa m, Confinado v) throws DAOException;
+    void asignarCasaAlConfinado(int codCasa, int codConfinado) throws DAOException;
 
     void finalizar() throws DAOException; //cortar la conexion
 

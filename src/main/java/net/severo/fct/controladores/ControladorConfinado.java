@@ -104,15 +104,17 @@ public class ControladorConfinado {
         }
         try {
             new VistaCasa().mostrarListaCasas(ServicioCasa.getServicio().servicioObtenerTodasLasCasas());
-            Integer codMec = new VistaCasa().pedirIdCasa();
+            Integer codCasa = vv.pedirIdCasa();
             vv.mostrarListaConfinados(ServicioConfinado.getServicio().servicioObtenerConfinados());
             Integer codigoConfinado = vv.pedirIdConfinado();
 
-            ServicioConfinado.getServicio().servicioAsignarCasaAlConfinado(codMec, codigoConfinado);
+            ServicioConfinado.getServicio().servicioAsignarCasaAlConfinado(codCasa, codigoConfinado);
 
         } catch (DAOException dao) {
+
             vv.mostrarError("Error en el controlador al intentar obtener los datos: " + dao.getMessage());
         } catch (ServiciosException se) {
+            se.printStackTrace();
             vv.mostrarError("Error en el controlador al asignar una casa al confinado: " + se.getMessage());
         }
 
