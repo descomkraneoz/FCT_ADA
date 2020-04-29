@@ -67,7 +67,7 @@ public class ServicioConfinado {
     //elimina un confinado al pasarle un id
 
     public void servicioEliminarConfinado(int codigo) throws DAOException, ServiciosException {
-        this.servicioObtenerConfinado(codigo);
+        //this.servicioObtenerConfinado(codigo);
         idao.eliminarConfinadoDAO(codigo);
 
     }

@@ -30,10 +30,15 @@ public class ConfinadoHibernate implements IConfinado {
 
     @Override
     public void eliminarConfinadoDAO(int idConfinado) throws DAOException {
+
         try {
             Confinado j = this.obtenerUnConfinadoPorID(idConfinado);
             Session sesion = SesionHibernate.getInstance().getSesion();
-            sesion.delete(j);
+
+            Query query = sesion.createQuery("delete Confinado where idConfinado = :id");
+            query.setParameter("id", idConfinado);
+            //sesion.delete(j);
+            int result = query.executeUpdate();
         } catch (Exception e) {
             throw new DAOException("Ha habido un problema al eliminar el confinado", e);
         }
