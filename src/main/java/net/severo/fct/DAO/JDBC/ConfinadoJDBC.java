@@ -43,7 +43,8 @@ public class ConfinadoJDBC implements IConfinado {
             ps = conn.prepareStatement(insertConfinado);
             ps.setInt(1, confinado.getIdConfinado());
             ps.setString(2, confinado.getNombre());
-            ps.setObject(3, confinado.getCasa());
+            ps.setInt(3, confinado.getCasa().getIdCasa());
+            //ps.setObject(3, confinado.getCasa());
 
             @SuppressWarnings("unused")
             int afectadas = ps.executeUpdate();
@@ -69,12 +70,22 @@ public class ConfinadoJDBC implements IConfinado {
         PreparedStatement ps = null;
 
         try {
+            conn = ConexionJDBC.getInstance().getConnection();
+
+
+            //ps = conn.prepareStatement(borrarMecanicoVehiculo);
+            //ps.setInt(1, idMecanico);
+            //ps = conn.prepareStatement(trampaParaOsos);
+
             ps = conn.prepareStatement(borrarConfinado);
             ps.setInt(1, idConfinado);
-            ps.executeUpdate();
+
+            int afectadas = ps.executeUpdate();
+
 
         } catch (Exception ex) {
             throw new DAOException("Ha habido un problema al eliminar el confinado de la base de datos: ", ex);
+            //ex.printStackTrace();
         } finally {
             try {
                 ps.close();
@@ -82,6 +93,7 @@ public class ConfinadoJDBC implements IConfinado {
             } catch (SQLException ex) {
                 throw new DAOException("Error al cerrar la base de datos", ex);
             }
+
         }
 
     }
@@ -137,8 +149,8 @@ public class ConfinadoJDBC implements IConfinado {
         try {
             conn = ConexionJDBC.getInstance().getConnection();
             ps = conn.prepareStatement(mostrarTodosLosConfinados);
-            ResultSet rs = ps.executeQuery();
 
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Confinado j = new Confinado();
                 int codConfinado = rs.getInt("idConfinado");
@@ -149,6 +161,7 @@ public class ConfinadoJDBC implements IConfinado {
                 j.setIdConfinado(codConfinado);
                 j.setNombre(nombre);
                 j.setCasa(casa);
+                j.getIdCasa();
 
                 confinados.add(j);
 
@@ -189,8 +202,8 @@ public class ConfinadoJDBC implements IConfinado {
 
 
         } catch (Exception ex) {
-            ex.printStackTrace();
-            //throw new DAOException("Ha habido un problema al cambiar de casa al confinado en la base de datos: ", ex);
+
+            throw new DAOException("Ha habido un problema al cambiar de casa al confinado en la base de datos: ", ex);
         } finally {
             try {
                 ps.close();
@@ -215,7 +228,7 @@ public class ConfinadoJDBC implements IConfinado {
         try {
             ConexionJDBC.getInstance().getConnection().setAutoCommit(false); //deja en espera a la base de datos para que no haga comit
         } catch (SQLException ex) {
-            throw new DAOException("Error al inicair la transaccion", ex);
+            throw new DAOException("Error al iniciar la transaccion", ex);
         }
     }
 
