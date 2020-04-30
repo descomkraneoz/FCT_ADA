@@ -1,0 +1,24 @@
+CREATE TABLE `casa` (
+  `idCasa` int(11) NOT NULL,
+  `tieneJardin` bit(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+ALTER TABLE `casa`
+  ADD PRIMARY KEY (`idCasa`);
+
+
+CREATE TABLE `confinado` (
+  `idConfinado` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `idCasa` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+ALTER TABLE `confinado`
+  ADD PRIMARY KEY (`idConfinado`),
+  ADD KEY `FK_tpid8ht60acaedkxa0dynlwu1` (`idCasa`);
+
+ALTER TABLE `confinado`
+  ADD CONSTRAINT `FK_tpid8ht60acaedkxa0dynlwu1` FOREIGN KEY (`idCasa`) REFERENCES `casa` (`idCasa`);
+
+
+COMMIT;
